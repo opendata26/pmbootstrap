@@ -1,6 +1,6 @@
 pkgname=device-qemu-vexpress
 pkgver=1
-pkgrel=7
+pkgrel=8
 pkgdesc="Simulated device in qemu with vexpress soc"
 url="https://github.com/postmarketOS"
 arch="noarch"
@@ -20,4 +20,4 @@ package() {
 		"$pkgdir"/etc/deviceinfo
 }
 
-sha512sums="cd0caab21677b5abfc4d58565831e3f1bcca87dd32626625a2ba9bbe53650aa7557d56a46a8cf1557725ecbe43a38e9e9c4637b8d9e925b1a8fbcb0710f7d521  deviceinfo"
+sha512sums="a18ab789c19d8802be6a9e9c842f4c304f267bd78f46b096b4ba6609430d1544e0a9eca9bc22db67a0728efae3aad6c2def9f7e64157d31aeb31b4bb839076d5  deviceinfo"
