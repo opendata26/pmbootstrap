@@ -26,45 +26,75 @@ import pmb.chroot.other
 import pmb.chroot.initfs
 import pmb.helpers.devices
 import pmb.helpers.run
+import pmb.parse.arch
+
+
+def system_image(args, device):
+    """
+    Returns path to system image for specified device. In case that it doesn't
+    exist, raise and exception explaining how to generate it.
+    """
+    path = args.work + "/chroot_native/home/user/rootfs/" + device + ".img"
+    if not os.path.exists(path):
+        logging.debug("Could not find system image: " + path)
+        img_command = "pmbootstrap install"
+        if device != args.device:
+            img_command = "pmbootstrap init' and '" + img_command
+        message = "The system image '{0}' has not been generated yet, please" \
+                  " run '{1}' first.".format(device, img_command)
+        raise RuntimeError(message)
+    return path
+
+
+def qemu_command(args, arch, device, img_path):
+    """
+    Generate the full QEMU command with arguments to run postmarketOS
+    """
+    deviceinfo = pmb.parse.deviceinfo(args, device=device)
+    cmdline = deviceinfo["kernel_cmdline"]
+    if args.cmdline:
+        cmdline = args.cmdline
+    logging.info("cmdline: " + cmdline)
+
+    qemu_bin = "qemu-system-" + arch
+    rootfs = args.work + "/chroot_rootfs_" + device
+    command = [qemu_bin,
+               "-kernel", rootfs + "/boot/vmlinuz-postmarketos",
+               "-initrd", rootfs + "/boot/initramfs-postmarketos",
+               "-m", str(args.memory),
+               "-append", '"' + cmdline + '"']
+
+    if arch != "x86_64":
+        dtb_image = rootfs + "/usr/share/dtb/" + deviceinfo["dtb"] + ".dtb"
+        if not os.path.exists(dtb_image):
+            raise RuntimeError("DTB file not found: " + dtb_image)
+        command += ["-dtb", dtb_image,
+                    "-sd", img_path,
+                    "-M", "vexpress-a9"]
+    else:
+        command += ["-serial", "stdio",
+                    "-drive", "file=" + img_path + ",format=raw"]
+    return command
 
 
 def run(args):
     """
-    Run qemu with the already generated postmarketOS image
+    Run a postmarketOS image in QEMU
     """
-    logging.info("Running postmarketOS in QEMU VM (" + args.arch + ")")
+    arch = pmb.parse.arch.uname_to_qemu(args.arch_native)
+    if args.arch:
+        arch = pmb.parse.arch.uname_to_qemu(args.arch)
+    logging.info("Running postmarketOS in QEMU VM (" + arch + ")")
 
-    # Check if the system image is already generated
-    img_path = "/home/user/rootfs/" + args.device + ".img"
-    if not os.path.exists(args.work + "/chroot_native" + img_path):
-        raise RuntimeError("The system image has not been generated yet,"
-                           " please run 'pmbootstrap install' first.")
+    device = pmb.parse.arch.qemu_to_pmos_device(arch)
+    img_path = system_image(args, device)
 
-    # Workaround: qemu runs as local user and needs write permissions
+    # Workaround: QEMU runs as local user and needs write permissions in the
+    # system image, which is owned by root
     if not os.access(img_path, os.W_OK):
         pmb.helpers.run.root(args, ["chmod", "666", img_path])
 
-    _cmdline = args.deviceinfo["kernel_cmdline"]
-    if args.cmdline:
-        _cmdline = args.cmdline
-    _cmdline = '"' + _cmdline + '"'
+    command = qemu_command(args, arch, device, img_path)
 
-    rootfs = args.work + "/chroot_rootfs_" + args.device
-    dtb_image = rootfs + "/usr/share/dtb/" + args.deviceinfo["dtb"] + ".dtb"
-
-    arch_mapping = {
-        "x86_64": "amd64",
-        "armhf": "vexpress-a9",
-    }
-    qemu_bin = "qemu-system-" + args.arch
-    command = [qemu_bin,
-               "-kernel", rootfs + "/boot/vmlinuz-postmarketos",
-               "-initrd", rootfs + "/boot/initramfs-postmarketos",
-               "-M", arch_mapping[args.arch],
-               "-m", str(args.memory),
-               "-sd", img_path,
-               "-append", _cmdline,
-               "-dtb", dtb_image]
-
+    logging.info("Command: " + " ".join(command))
     pmb.helpers.run.user(args, command)
-
