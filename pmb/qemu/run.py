@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with pmbootstrap.  If not, see <http://www.gnu.org/licenses/>.
 """
 import logging
+import os
 
 import pmb.build
 import pmb.chroot
@@ -38,6 +39,10 @@ def run(args):
     if not os.path.exists(args.work + "/chroot_native" + img_path):
         raise RuntimeError("The system image has not been generated yet,"
                            " please run 'pmbootstrap install' first.")
+
+    # Workaround: qemu runs as local user and needs write permissions
+    if not os.access(img_path, os.W_OK):
+        pmb.helpers.run.root(args, ["chmod", "666", img_path])
 
     _cmdline = args.deviceinfo["kernel_cmdline"]
     if args.cmdline:
