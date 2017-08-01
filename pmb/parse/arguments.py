@@ -224,6 +224,8 @@ def arguments():
     qemu.add_argument("--arch", default="x86_64", choices=["x86_64", "armhf"],
                       help="architecture (default: x86_64)")
     qemu.add_argument("--cmdline", help="override kernel commandline")
+    qemu.add_argument("-m", "--memory", type=int, default=1024,
+                      help="guest RAM (default: 1024)")
 
     # Use defaults from the user's config file
     args = parser.parse_args()

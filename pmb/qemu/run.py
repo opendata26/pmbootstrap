@@ -61,6 +61,7 @@ def run(args):
                "-kernel", rootfs + "/boot/vmlinuz-postmarketos",
                "-initrd", rootfs + "/boot/initramfs-postmarketos",
                "-M", arch_mapping[args.arch],
+               "-m", str(args.memory),
                "-sd", img_path,
                "-append", _cmdline,
                "-dtb", dtb_image]
