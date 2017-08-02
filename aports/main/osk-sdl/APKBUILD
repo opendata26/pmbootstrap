@@ -1,0 +1,26 @@
+pkgname=osk-sdl
+pkgver=1
+pkgrel=1
+pkgdesc="Onscreen Keyboard for Framebuffer"
+url="https://github.com/craftyguy/onscreenkeyboard"
+arch="all"
+license="GPL2"
+depends="sdl2_image sdl2 sdl2_ttf cryptsetup-libs"
+makedepends="linux-headers sdl2-dev sdl2_image-dev sdl2_ttf cryptsetup-dev"
+subpackages=""
+
+#source="https://github.com/craftyguy/${pkgname}/archive/master.tar.gz"
+source="osk-sdl.tar.gz"
+
+options="!strip"
+
+build() {
+	cd "$srcdir"
+	make
+}
+
+package() {
+	install -D -m755 "$srcdir"/osk-sdl \
+		"$pkgdir"/usr/bin/osk-sdl
+}
+sha512sums="3eaab26767fccaaae5f4a2a006d2fa394b46b8fa1c644c0caf0e37e0c44e893aec76c05a193901fd107ece8032003935624fcb963d971e4b03b44e5642fbd6ac  osk-sdl.tar.gz"
