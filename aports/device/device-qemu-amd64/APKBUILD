@@ -8,7 +8,7 @@ license="MIT"
 depends="linux-postmarketos"
 makedepends=""
 subpackages=""
-source="deviceinfo"
+source="deviceinfo interfaces"
 options="!check"
 
 build() {
@@ -18,6 +18,9 @@ build() {
 package() {
 	install -D -m644 "$srcdir"/deviceinfo \
 		"$pkgdir"/etc/deviceinfo
+	install -D -m644 "$srcdir"/interfaces \
+		"$pkgdir"/etc/network/interfaces
 }
 
-sha512sums="b73fe8c04f482fe63b31b80ad901d8e5349fc713e99137a273b0cfbae25e4c7d23bff8e5aac582ab4a3b87d0039aa166dd5b9827c1afc0551cef800916749697  deviceinfo"
+sha512sums="b73fe8c04f482fe63b31b80ad901d8e5349fc713e99137a273b0cfbae25e4c7d23bff8e5aac582ab4a3b87d0039aa166dd5b9827c1afc0551cef800916749697  deviceinfo
+d510ca304066840aa5e6c4fc71ded1b7e83012c93837fa39e37bdb873b3636230030d56f7aa50c93fc688f563cb4cb96c02ad333bbc45a400c1ebee1792a9dd4  interfaces"
