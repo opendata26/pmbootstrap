@@ -20,4 +20,4 @@ package() {
 		"$pkgdir"/etc/deviceinfo
 }
 
-sha512sums="2329e4b6a2a4a27766928ad3c0ee029c7c1ec4a7d753ab30a37c2a8b261dee2fe8573266c8b5c58fce5e22eeac0977a793a988b48922257ffa32ec0debdee675  deviceinfo"
+sha512sums="b73fe8c04f482fe63b31b80ad901d8e5349fc713e99137a273b0cfbae25e4c7d23bff8e5aac582ab4a3b87d0039aa166dd5b9827c1afc0551cef800916749697  deviceinfo"
