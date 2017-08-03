@@ -65,12 +65,16 @@ def qemu_command(args, arch, device, img_path):
                "-append", '"' + cmdline + '"']
 
     if arch != "x86_64":
+        machine = {
+            "armhf": "vexpress-a9",
+            "aarch64": "virt"
+        }
         dtb_image = rootfs + "/usr/share/dtb/" + deviceinfo["dtb"] + ".dtb"
         if not os.path.exists(dtb_image):
             raise RuntimeError("DTB file not found: " + dtb_image)
         command += ["-dtb", dtb_image,
                     "-sd", img_path,
-                    "-M", "vexpress-a9"]
+                    "-M", machine[arch]]
     else:
         command += ["-serial", "stdio",
                     "-drive", "file=" + img_path + ",format=raw"]

@@ -153,7 +153,7 @@ def qemu_to_pmos_device(arch):
     """
     mapping = {
         "arm": "qemu-vexpress",
-        "aarch64": "qemu-vexpress",
+        "aarch64": "qemu-aarch64",
         "i386": "qemu-amd64",
         "x86_64": "qemu-amd64",
     }
