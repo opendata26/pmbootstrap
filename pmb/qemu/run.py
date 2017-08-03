@@ -74,6 +74,10 @@ def qemu_command(args, arch, device, img_path):
     else:
         command += ["-serial", "stdio",
                     "-drive", "file=" + img_path + ",format=raw"]
+    # KVM support
+    if os.path.exists("/dev/kvm"):
+        command += ["-enable-kvm"]
+
     return command
 
 
