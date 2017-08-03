@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/x86_64 4.12.0 Kernel Configuration
+# Linux/x86_64 4.12.4 Kernel Configuration
 #
 CONFIG_64BIT=y
 CONFIG_X86_64=y
@@ -1673,6 +1673,7 @@ CONFIG_VIRTIO_NET=m
 # Distributed Switch Architecture drivers
 #
 CONFIG_ETHERNET=y
+CONFIG_MDIO=y
 CONFIG_NET_VENDOR_3COM=y
 # CONFIG_VORTEX is not set
 # CONFIG_TYPHOON is not set
@@ -1733,7 +1734,18 @@ CONFIG_NET_VENDOR_EXAR=y
 # CONFIG_VXGE is not set
 CONFIG_NET_VENDOR_HP=y
 # CONFIG_HP100 is not set
-# CONFIG_NET_VENDOR_INTEL is not set
+CONFIG_NET_VENDOR_INTEL=y
+# CONFIG_E100 is not set
+CONFIG_E1000=y
+CONFIG_E1000E=y
+CONFIG_E1000E_HWTS=y
+# CONFIG_IGB is not set
+# CONFIG_IGBVF is not set
+CONFIG_IXGB=y
+CONFIG_IXGBE=y
+CONFIG_IXGBE_HWMON=y
+# CONFIG_I40E is not set
+CONFIG_NET_VENDOR_I825XX=y
 # CONFIG_JME is not set
 # CONFIG_NET_VENDOR_MARVELL is not set
 CONFIG_NET_VENDOR_MELLANOX=y
