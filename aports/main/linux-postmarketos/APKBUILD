@@ -110,8 +110,13 @@ build() {
 package() {
 	cd "$srcdir/build/arch/${_carch}/boot"
 	
-	install -Dm644 "$srcdir/build/arch/${_carch}/boot/"*zImage \
-		"$pkgdir/boot/vmlinuz-$_flavor"
+	if [ "$CARCH" == "aarch64" ]; then
+		install -Dm644 "$srcdir/build/arch/${_carch}/boot/Image" \
+			"$pkgdir/boot/vmlinuz-$_flavor"
+	else
+		install -Dm644 "$srcdir/build/arch/${_carch}/boot/"*zImage \
+			"$pkgdir/boot/vmlinuz-$_flavor"
+	fi
 
 	install -D "$srcdir/build/include/config/kernel.release" \
 		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
@@ -185,8 +190,8 @@ dev() {
 }
 
 sha512sums="8e81b41b253e63233e92948941f44c6482acb52aa3a3fd172f03a38a86f2c35b2ad4fd407acd1bc3964673eba344fe104d3a03e3ff4bf9cd1f22bd44263bd728  linux-4.12.tar.xz
-666fcd28b4b5a16ccf5e7768c3749678333d9ee1f82e6d5e5e6919576ad22d0e73262fe11cc396fe31be9f8e8e993df8b6544a8dd0be9c2acf475595346f9295  config-postmarketos.armhf
-666fcd28b4b5a16ccf5e7768c3749678333d9ee1f82e6d5e5e6919576ad22d0e73262fe11cc396fe31be9f8e8e993df8b6544a8dd0be9c2acf475595346f9295  config-postmarketos.aarch64
+3f4435ce0cf227e4ba64aa7153c913370c53069e34a376e453786d601b5a73706a3f44b002fab1b10a72dc94e896c1d8fb462c2b78e62ed69c468d98aa7220da  config-postmarketos.armhf
+6046afbbf68cb103ffba7cfb59ddd62ac8a84e0818c1762c351d2b5144e095168450538a16f60b7a080633bff80ac7dae13774f0ed272c08a0ea973347388d40  config-postmarketos.aarch64
 df0420c373bbc5d52957b504ce154c0a3ef062069da8a163e23aea455879b7c23a12ab518bfae5a6fd245204c2e9460edac6ef3e0d415740b921510e75f5b23b  config-postmarketos.x86_64
 17c48bb7b4218297bd2be6faa5b6570ce1560a33385237a9962c0884d782c9a722a25a30077b6721d2943a9b98c29dcad6adfef718b0163c559c19a79519319b  0001-rx51-drm-regression-workaround.patch
 8a6b72524050733c166524230d85f808275a65c28f06444350ebb8c64dd4cab666f8629ef1d1d2b6c25c1f36820a1fd114510af5a38509df55f9c3071543e647  patch-4.12.4.xz"
