@@ -46,25 +46,25 @@ def system_image(args, device):
     return path
 
 
-def which_qemu(arch):
+def which_qemu(args, arch):
     """
-    Finds the QEMU executable or raises and exception otherwise
+    Finds the qemu executable or raises and exception otherwise
     """
     executable = "qemu-system-" + arch
     try:
-        raw = subprocess.check_output(["which", executable])
+        pmb.helpers.run.user(args, ["which", executable])
         return executable
-    except subprocess.CalledProcessError as e:
-        raise RuntimeError("Could not find the '" + binary + "' executable"
+    except RuntimeError:
+        raise RuntimeError("Could not find the '" + executable + "' executable"
                            " in your PATH. Please install it in order to"
-                           " run QEMU.")
+                           " run qemu.")
 
 
 def qemu_command(args, arch, device, img_path):
     """
-    Generate the full QEMU command with arguments to run postmarketOS
+    Generate the full qemu command with arguments to run postmarketOS
     """
-    qemu_bin = which_qemu(arch)
+    qemu_bin = which_qemu(args, arch)
     deviceinfo = pmb.parse.deviceinfo(args, device=device)
     cmdline = deviceinfo["kernel_cmdline"]
     if args.cmdline:
@@ -102,14 +102,14 @@ def qemu_command(args, arch, device, img_path):
     if enable_kvm and os.path.exists("/dev/kvm"):
         command += ["-enable-kvm"]
     else:
-        logging.info("Warning: QEMU is not using KVM and will run slower!")
+        logging.info("Warning: qemu is not using KVM and will run slower!")
 
     return command
 
 
 def run(args):
     """
-    Run a postmarketOS image in QEMU
+    Run a postmarketOS image in qemu
     """
     arch = pmb.parse.arch.uname_to_qemu(args.arch_native)
     if args.arch:
@@ -119,7 +119,7 @@ def run(args):
     device = pmb.parse.arch.qemu_to_pmos_device(arch)
     img_path = system_image(args, device)
 
-    # Workaround: QEMU runs as local user and needs write permissions in the
+    # Workaround: qemu runs as local user and needs write permissions in the
     # system image, which is owned by root
     if not os.access(img_path, os.W_OK):
         pmb.helpers.run.root(args, ["chmod", "666", img_path])
