@@ -133,9 +133,6 @@ def uname_to_qemu(arch):
         "armeb": "arm",
         "armel": "arm",
         "armhf": "arm",
-        "i386": "i386",
-        "i686": "i386",
-        "x86": "i386",
         "x86_64": "x86_64",
         "amd64": "x86_64",
     }
@@ -154,7 +151,6 @@ def qemu_to_pmos_device(arch):
     mapping = {
         "arm": "qemu-vexpress",
         "aarch64": "qemu-aarch64",
-        "i386": "qemu-amd64",
         "x86_64": "qemu-amd64",
     }
     if arch in mapping:
