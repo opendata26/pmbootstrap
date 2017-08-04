@@ -78,9 +78,17 @@ def qemu_command(args, arch, device, img_path):
     else:
         command += ["-serial", "stdio",
                     "-drive", "file=" + img_path + ",format=raw"]
-    # KVM support
-    if os.path.exists("/dev/kvm"):
+
+    # Kernel Virtual Machine (KVM) support
+    enable_kvm = True
+    if args.arch:
+        arch1 = pmb.parse.arch.uname_to_qemu(args.arch_native)
+        arch2 = pmb.parse.arch.uname_to_qemu(args.arch)
+        enable_kvm = (arch1 == arch2)
+    if enable_kvm and os.path.exists("/dev/kvm"):
         command += ["-enable-kvm"]
+    else:
+        logging.info("Warning: QEMU is not using KVM and will run slower!")
 
     return command
 
