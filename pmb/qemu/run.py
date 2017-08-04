@@ -46,17 +46,31 @@ def system_image(args, device):
     return path
 
 
+def which_qemu(arch):
+    """
+    Finds the QEMU executable or raises and exception otherwise
+    """
+    executable = "qemu-system-" + arch
+    try:
+        raw = subprocess.check_output(["which", executable])
+        return executable
+    except subprocess.CalledProcessError as e:
+        raise RuntimeError("Could not find the '" + binary + "' executable"
+                           " in your PATH. Please install it in order to"
+                           " run QEMU.")
+
+
 def qemu_command(args, arch, device, img_path):
     """
     Generate the full QEMU command with arguments to run postmarketOS
     """
+    qemu_bin = which_qemu(arch)
     deviceinfo = pmb.parse.deviceinfo(args, device=device)
     cmdline = deviceinfo["kernel_cmdline"]
     if args.cmdline:
         cmdline = args.cmdline
     logging.info("cmdline: " + cmdline)
 
-    qemu_bin = "qemu-system-" + arch
     rootfs = args.work + "/chroot_rootfs_" + device
     command = [qemu_bin,
                "-kernel", rootfs + "/boot/vmlinuz-postmarketos",
