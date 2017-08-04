@@ -78,20 +78,31 @@ def qemu_command(args, arch, device, img_path):
                "-m", str(args.memory),
                "-append", '"' + cmdline + '"']
 
-    if arch != "x86_64":
-        machine = {
-            "armhf": "vexpress-a9",
-            "aarch64": "virt"
-        }
+    if deviceinfo["dtb"] != "":
         dtb_image = rootfs + "/usr/share/dtb/" + deviceinfo["dtb"] + ".dtb"
         if not os.path.exists(dtb_image):
             raise RuntimeError("DTB file not found: " + dtb_image)
-        command += ["-dtb", dtb_image,
-                    "-sd", img_path,
-                    "-M", machine[arch]]
-    else:
+        command += ["-dt", dtb_image]
+
+    if arch == "x86_64":
         command += ["-serial", "stdio",
                     "-drive", "file=" + img_path + ",format=raw"]
+
+    elif arch == "armhf":
+        command += ["-M", "vexpress-a9"]
+        command += ["-sd", img_path]
+
+    elif arch == "aarch64":
+        command += ["-M", "virt"]
+        command += ["-cpu", "cortex-a57"]
+        command += ["-device", "virtio-gpu-pci"]
+
+        # add storage
+        command += ["-device", "virtio-blk-device,drive=system"]
+        command += ["-drive", "if=none,id=system,file={},id=hd0".format(img_path)]
+
+    else:
+        raise RuntimeError("Architecture {} not supported by this command yet.".format(arch))
 
     # Kernel Virtual Machine (KVM) support
     enable_kvm = True
