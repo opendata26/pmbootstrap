@@ -72,23 +72,23 @@ def qemu_command(args, arch, device, img_path):
     logging.info("cmdline: " + cmdline)
 
     rootfs = args.work + "/chroot_rootfs_" + device
-    command = [qemu_bin,
-               "-kernel", rootfs + "/boot/vmlinuz-postmarketos",
-               "-initrd", rootfs + "/boot/initramfs-postmarketos",
-               "-m", str(args.memory),
-               "-append", '"' + cmdline + '"']
+    command = [qemu_bin]
+    command += ["-kernel", rootfs + "/boot/vmlinuz-postmarketos"]
+    command += ["-initrd", rootfs + "/boot/initramfs-postmarketos"]
+    command += ["-append", '"' + cmdline + '"']
+    command += ["-m", str(args.memory)]
 
     if deviceinfo["dtb"] != "":
         dtb_image = rootfs + "/usr/share/dtb/" + deviceinfo["dtb"] + ".dtb"
         if not os.path.exists(dtb_image):
             raise RuntimeError("DTB file not found: " + dtb_image)
-        command += ["-dt", dtb_image]
+        command += ["-dtb", dtb_image]
 
     if arch == "x86_64":
-        command += ["-serial", "stdio",
-                    "-drive", "file=" + img_path + ",format=raw"]
+        command += ["-serial", "stdio"]
+        command += ["-drive", "file=" + img_path + ",format=raw"]
 
-    elif arch == "armhf":
+    elif arch == "arm":
         command += ["-M", "vexpress-a9"]
         command += ["-sd", img_path]
 
