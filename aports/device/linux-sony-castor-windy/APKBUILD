@@ -12,8 +12,8 @@
 # - disable proprietary graphics driver
 
 _vendor=sony
-_flavor=sony-castor_windy
-_hash=41e99cea7c35e82d74862b0293a24a1930c322c4
+_flavor=sony-castor-windy
+_branch=wifi-fixes
 _config="config-${_flavor}.armhf"
 
 pkgname=linux-${_flavor}
@@ -25,13 +25,13 @@ esac
 pkgrel=1
 arch="armhf"
 pkgdesc="Sony Xperia Z2 Tablet kernel"
-url="https://github.com/andersson"
+url="https://github.com/opendata26"
 depends="postmarketos-mkinitfs"
 makedepends="perl sed installkernel  bash gmp-dev bc linux-headers elfutils-dev"
 options="!strip !check !tracedeps"
 install=
 source="
-	$pkgname-$_hash.tar.gz::https://github.com/andersson/kernel/archive/${_hash}.tar.gz
+	$pkgname-$_branch.tar.gz::https://github.com/opendata26/kernel/archive/${_branch}.tar.gz
 	$_config
 	compiler-gcc6.h
 "

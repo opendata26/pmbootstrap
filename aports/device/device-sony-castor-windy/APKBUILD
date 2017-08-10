@@ -1,11 +1,11 @@
-pkgname=device-sony-castor_windy
+pkgname=device-sony-castor-windy
 pkgver=1
 pkgrel=4
 pkgdesc="Sony Xperia Z2 Tablet WIFI"
 url="https://github.com/postmarketOS"
 arch="noarch"
 license="MIT"
-depends="mkbootimg linux-sony-castor_windy"
+depends="mkbootimg linux-sony-castor-windy"
 makedepends=""
 install=""
 subpackages=""
@@ -20,8 +20,6 @@ package() {
 	install -D -m644 "$srcdir/deviceinfo" \
 		"$pkgdir/etc/deviceinfo"
 	
-	install -D -m644 "$srcdir"/90-android.rules \
-		"$pkgdir"/etc/udev/rules.d/90-android.rules
 }
 
 sha512sums="2814b5a1522f01b82d867d1506992e14892435f1ceba084c05dfedf93f0e1c3f50aa8b754975b30acf642c2c476daccf61d1e1b02aa481dbf033b4f2e61d4607  deviceinfo
