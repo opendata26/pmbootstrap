@@ -43,7 +43,7 @@ _carch="arm"
 HOSTCC="${CC:-gcc}"
 HOSTCC="${HOSTCC#${CROSS_COMPILE}}"
 
-ksrcdir="$srcdir/kernel-${_hash}"
+ksrcdir="$srcdir/kernel-${_branch}"
 
 prepare() {
 	local _patch_failed=
@@ -106,6 +106,6 @@ package() {
 	install -D "$srcdir/build/include/config/kernel.release" \
 		"$pkgdir/usr/share/kernel/$_flavor/kernel.release"
 }
-sha512sums="47b0af78acd3f54633a34656545968b965a3833b690bd9af74fb9dbebfbd02493799cfcc18cba39b154003e57ab6b0974c24798f7733cf27c0855d81c9249b38  linux-sony-castor_windy-41e99cea7c35e82d74862b0293a24a1930c322c4.tar.gz
-6505f6371153bc741d48bd9f9e15001c8ccd7feb96ce6bb3a6ab7cb3b2012e7b61439edbbac5b1377e11b3af1cb4e2b3878b54b4fdc00729f0a6b2272f64591f  config-sony-castor_windy.armhf
+sha512sums="d27a8850e6412c2edb2752433600c9b46e3a83a319b3d175dfeaff447ddc2213c4bbfcdb3688eed76743dc89ac1679a40ec95e8b334f30b4e463ae42facdfcc5  linux-sony-castor-windy-wifi-fixes.tar.gz
+6505f6371153bc741d48bd9f9e15001c8ccd7feb96ce6bb3a6ab7cb3b2012e7b61439edbbac5b1377e11b3af1cb4e2b3878b54b4fdc00729f0a6b2272f64591f  config-sony-castor-windy.armhf
 d80980e9474c82ba0ef1a6903b434d8bd1b092c40367ba543e72d2c119301c8b2d05265740e4104ca1ac5d15f6c4aa49e8776cb44264a9a28dc551e0d1850dcc  compiler-gcc6.h"
